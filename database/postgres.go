@@ -13,7 +13,7 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
-	err := godotenv.Load(".env.local")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading env file \n", err)
 	}
