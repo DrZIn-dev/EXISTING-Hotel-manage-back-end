@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  db:
+    image: "postgres:latest" # use latest official postgres version
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    env_file:
+      - .env.local # configure postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: db
+      PORT: "8000"
+    command: [ "gin", "-i", "-a", "8000", "-p", "3000", "run", "main.go" ]
+    env_file:
+      - .env.local # configure postgres
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+
+
+volumes:
+  postgres_data:
+    driver: local
