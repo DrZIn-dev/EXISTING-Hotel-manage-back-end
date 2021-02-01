@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/gofiber/fiber/v2 v2.4.0
+	github.com/google/uuid v1.2.0 // indirect
 	github.com/joho/godotenv v1.3.0
 	gorm.io/driver/postgres v1.0.7
 	gorm.io/gorm v1.20.12
