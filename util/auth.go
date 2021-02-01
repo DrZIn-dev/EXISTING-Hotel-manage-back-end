@@ -4,6 +4,7 @@ import (
 	db "github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/database"
 	"github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/models"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gofiber/fiber/v2"
 	"os"
 	"time"
 )
@@ -71,4 +72,24 @@ func GenerateRefreshClaims(cl *models.Claims) string {
 	}
 
 	return refreshTokenString
+}
+
+func GetAuthCookies(accessToken, refreshToken string) (*fiber.Cookie, *fiber.Cookie) {
+	accessCookie := &fiber.Cookie{
+		Name:     "access_token",
+		Value:    accessToken,
+		Expires:  time.Now().Add(15 * time.Minute),
+		HTTPOnly: true,
+		Secure:   true,
+	}
+
+	refreshCookie := &fiber.Cookie{
+		Name:     "refresh_token",
+		Value:    refreshToken,
+		Expires:  time.Now().Add(30 * 24 * time.Hour),
+		HTTPOnly: true,
+		Secure:   true,
+	}
+
+	return accessCookie, refreshCookie
 }
