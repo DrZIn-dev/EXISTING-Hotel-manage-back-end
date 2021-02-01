@@ -1,12 +1,14 @@
 package main
 
 import (
-	"github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/database"
-	"github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/router"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
 	"os"
+
+	"github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/database"
+	"github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/router"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func CreateServer() *fiber.App {
