@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -35,4 +36,6 @@ func ConnectDB() {
 	}
 
 	log.Println("connected")
+
+	DB.AutoMigrate(&models.User{}, &models.Claims{})
 }
