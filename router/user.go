@@ -13,6 +13,10 @@ import (
 func SetupUserRoutes() {
 	USER.Post("/signup", CreateUser)
 	USER.Post("/signin", LoginUser)
+
+	private := USER.Group("/private")
+	private.Use(util.SecureAuth())
+	private.Get("/user", GetUserData)
 }
 
 func CreateUser(c *fiber.Ctx) error {
@@ -109,4 +113,15 @@ func LoginUser(c *fiber.Ctx) error {
 		"access_token":  accessToken,
 		"refresh_token": refreshToken,
 	})
+}
+
+func GetUserData(c *fiber.Ctx) error {
+	id := c.Locals("id")
+	u := new(models.UserResponse)
+	res := db.DB.Model(&models.User{}).Where("uuid = ? ", id).First(&u)
+	if res.RowsAffected <= 0 {
+		return c.JSON(fiber.Map{"error": true, "general": "Cannot find the User"})
+	}
+
+	return c.JSON(u)
 }
