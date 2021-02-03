@@ -37,14 +37,17 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <form class="d-flex gap-3">
+                        <router-link
+                            :to="{ name: 'Home' }"
+                            exact
+                            class="btn btn-outline-light"
+                            style="text-decoration: none;border-color:#212529"
+                            >Login
+                        </router-link>
                         <button
                             class="btn btn-outline-light"
-                            type="submit"
-                            style="border-color:#212529"
+                            @click="$router.push({ name: 'Register' })"
                         >
-                            Login
-                        </button>
-                        <button class="btn btn-outline-light" type="submit">
                             Register
                         </button>
                     </form>
