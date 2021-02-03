@@ -39,7 +39,7 @@ func CreateUser(c *fiber.Ctx) error {
 
 	errors := util.ValidateRegister(u)
 	if errors.Err {
-		return c.JSON(errors)
+		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
 	emailCount := db.DB.Where(&models.User{Email: u.Email}).First(new(models.User)).RowsAffected
@@ -52,7 +52,7 @@ func CreateUser(c *fiber.Ctx) error {
 		errors.Err, errors.Username = true, "Username is already registered"
 	}
 	if errors.Err {
-		return c.JSON(errors)
+		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
 	password := []byte(u.Password)
@@ -73,6 +73,12 @@ func CreateUser(c *fiber.Ctx) error {
 
 	accessToken, refreshToken := util.GenerateTokens(u.UUID.String())
 	accessCookie, refreshCookie := util.GetAuthCookies(accessToken, refreshToken)
+	accessCookie.HTTPOnly = false
+	accessCookie.SameSite = ""
+	accessCookie.Secure = false
+	refreshCookie.HTTPOnly = false
+	refreshCookie.SameSite = ""
+	refreshCookie.Secure = false
 
 	c.Cookie(accessCookie)
 	c.Cookie(refreshCookie)

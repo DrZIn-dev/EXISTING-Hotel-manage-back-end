@@ -29,12 +29,12 @@
                         <router-link
                             :to="{ name: 'Home' }"
                             exact
-                            class="btn btn-outline-light"
+                            class="btn btn-outline-light rounded-0"
                             style="text-decoration: none;border-color:#212529"
                             >Login
                         </router-link>
                         <button
-                            class="btn btn-outline-light"
+                            class="btn btn-outline-light rounded-0"
                             @click="$router.push({ name: 'Register' })"
                         >
                             Register
@@ -43,7 +43,7 @@
                 </div>
             </nav>
         </header>
-        <div class="h-100">
+        <div class="h-100 ">
             <router-view />
         </div>
     </div>
