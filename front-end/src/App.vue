@@ -25,17 +25,6 @@
                         </svg>
                         MURTEL
                     </a>
-                    <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
                     <form class="d-flex gap-3">
                         <router-link
                             :to="{ name: 'Home' }"
