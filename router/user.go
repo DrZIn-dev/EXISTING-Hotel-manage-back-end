@@ -5,14 +5,20 @@ import (
 	"github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/models"
 	"github.com/DrZIn-dev/EXISTING-Hotel-manage-back-end/util"
 	"github.com/asaskevich/govalidator"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 	"math/rand"
+	"os"
+	"time"
 )
+
+var jwtKey = []byte(os.Getenv("PRIVATE_KEY"))
 
 func SetupUserRoutes() {
 	USER.Post("/signup", CreateUser)
 	USER.Post("/signin", LoginUser)
+	USER.Get("/get-access-token", GetAccessToken)
 
 	private := USER.Group("/private")
 	private.Use(util.SecureAuth())
@@ -113,6 +119,48 @@ func LoginUser(c *fiber.Ctx) error {
 		"access_token":  accessToken,
 		"refresh_token": refreshToken,
 	})
+}
+
+func GetAccessToken(c *fiber.Ctx) error {
+	refreshToken := c.Cookies("refresh_token")
+	refreshClaims := new(models.Claims)
+	token, _ := jwt.ParseWithClaims(refreshToken, refreshClaims, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+
+	if res := db.DB.Where(
+		"expires_at = ? AND issued_at = ? AND issuer = ?",
+		refreshClaims.ExpiresAt, refreshClaims.IssuedAt, refreshClaims.Issuer,
+	).First(&models.Claims{}); res.RowsAffected <= 0 {
+		// no such refresh token exist in the database
+		c.ClearCookie("access_token", "refresh_token")
+		return c.SendStatus(fiber.StatusForbidden)
+	}
+
+	if token.Valid {
+		if refreshClaims.ExpiresAt < time.Now().Unix() {
+			// refresh token is expired
+			c.ClearCookie("access_token", "refresh_token")
+			return c.SendStatus(fiber.StatusForbidden)
+		}
+	} else {
+		// malformed refresh token
+		c.ClearCookie("access_token", "refresh_token")
+		return c.SendStatus(fiber.StatusForbidden)
+	}
+
+	_, accessToken := util.GenerateAccessClaims(refreshClaims.Issuer)
+
+	c.Cookie(&fiber.Cookie{
+		Name:     "access_token",
+		Value:    accessToken,
+		Expires:  time.Now().Add(24 * time.Hour),
+		HTTPOnly: true,
+		Secure:   true,
+	})
+
+	return c.JSON(fiber.Map{"access_token": accessToken})
+
 }
 
 func GetUserData(c *fiber.Ctx) error {
