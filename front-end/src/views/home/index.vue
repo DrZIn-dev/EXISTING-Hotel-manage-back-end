@@ -1,5 +1,5 @@
 <template>
-    <div class="patterns h-100">
+    <div class="h-100">
         <div class="container ">
             <div class="hero ">
                 <div class="row">
@@ -73,10 +73,18 @@
 </template>
 
 <script>
-import { sync } from "vuex-pathify";
+import { call, sync } from "vuex-pathify";
 export default {
     computed: {
         ...sync("Home", ["locations", "checkIn", "checkOut", "persons"])
+    },
+    methods: {
+        ...call(["getUserData"])
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            vm.getUserData();
+        });
     }
 };
 </script>

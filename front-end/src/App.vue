@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="font-monospace">
+    <div id="app" class="font-monospace patterns">
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container">
@@ -25,14 +25,14 @@
                         </svg>
                         MURTEL
                     </a>
-                    <form class="d-flex gap-3">
-                        <router-link
-                            :to="{ name: 'Home' }"
-                            exact
+                    <form class="d-flex gap-3" v-if="username === ''">
+                        <button
                             class="btn btn-outline-light rounded-0"
                             style="text-decoration: none;border-color:#212529"
-                            >Login
-                        </router-link>
+                            @click="$router.push({ name: 'Login' })"
+                        >
+                            Login
+                        </button>
                         <button
                             class="btn btn-outline-light rounded-0"
                             @click="$router.push({ name: 'Register' })"
@@ -40,14 +40,41 @@
                             Register
                         </button>
                     </form>
+                    <form class="d-flex gap-3" v-else>
+                        <button
+                            class="btn btn-outline-light rounded-0"
+                            style="text-decoration: none;border-color:#212529"
+                            @click="$router.push({ name: 'Login' })"
+                        >
+                            WELCOME, {{ username }}
+                        </button>
+                        <button
+                            class="btn btn-outline-secondary rounded-0"
+                            style="text-decoration: none;border-color:#212529"
+                            @click="logOut"
+                        >
+                            Logout
+                        </button>
+                    </form>
                 </div>
             </nav>
         </header>
-        <div class="h-100 ">
+        <div>
             <router-view />
         </div>
     </div>
 </template>
+<script>
+import { call, get } from "vuex-pathify";
+export default {
+    computed: {
+        ...get(["username"])
+    },
+    methods: {
+        ...call(["logOut"])
+    }
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -55,6 +82,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    height: 100vh;
+    min-height: 100vh;
 }
 </style>

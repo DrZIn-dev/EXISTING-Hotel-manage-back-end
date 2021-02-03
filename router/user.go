@@ -160,9 +160,10 @@ func GetAccessToken(c *fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{
 		Name:     "access_token",
 		Value:    accessToken,
-		Expires:  time.Now().Add(24 * time.Hour),
-		HTTPOnly: true,
-		Secure:   true,
+		Expires:  time.Now().Add(15 * time.Minute),
+		HTTPOnly: false,
+		SameSite: "",
+		Secure:   false,
 	})
 
 	return c.JSON(fiber.Map{"access_token": accessToken})

@@ -1,6 +1,6 @@
 <template>
-    <div class="patterns h-100">
-        <div class="container-sm h-100 ">
+    <div class=" h-100">
+        <div class="container-sm">
             <div class="panel d-flex align-items-center justify-content-center">
                 <div
                     class="card align-self-center rounded-0"
@@ -89,6 +89,7 @@ export default {
             this.isLoading = true;
             this.onRegister()
                 .then(() => {
+                    this.$router.replace({ name: "Home" });
                     this.isLoading = false;
                 })
                 .catch(err => {
