@@ -20,6 +20,7 @@
                                     <input
                                         class="form-control rounded-0"
                                         placeholder="Type to search..."
+                                        v-model="locations"
                                     />
                                 </div>
                             </div>
@@ -29,6 +30,7 @@
                                     <input
                                         class="form-control rounded-0"
                                         type="date"
+                                        v-model="checkIn"
                                     />
                                 </div>
                             </div>
@@ -38,6 +40,7 @@
                                     <input
                                         class="form-control rounded-0"
                                         type="date"
+                                        v-model="checkOut"
                                     />
                                 </div>
                             </div>
@@ -49,6 +52,7 @@
                                         type="number"
                                         value="1"
                                         min="1"
+                                        v-model="persons"
                                     />
                                 </div>
                             </div>
@@ -69,7 +73,12 @@
 </template>
 
 <script>
-export default {};
+import { sync } from "vuex-pathify";
+export default {
+    computed: {
+        ...sync("Home", ["locations", "checkIn", "checkOut", "persons"])
+    }
+};
 </script>
 
 <style scoped>
