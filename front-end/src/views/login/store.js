@@ -12,11 +12,31 @@ const getters = {
 };
 
 const mutations = {
-    ...make.mutations(state)
+    ...make.mutations(state),
+    resetState(state) {
+        Object.assign(state, getDefaultState());
+    }
 };
 
 const actions = {
-    ...make.actions(state)
+    ...make.actions(state),
+    onLogin({ state }) {
+        const { username, password } = state;
+        console.log({ username, password });
+        return this._vm.axios
+            .post("/user/signin", {
+                identity: username,
+                password
+            })
+            .then(({ data }) => {
+                console.log(data);
+                return Promise.resolve();
+            })
+            .catch(err => Promise.reject(err));
+    },
+    resetDefaultState({ commit }) {
+        commit("resetState");
+    }
 };
 
 export default {

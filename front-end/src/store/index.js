@@ -26,16 +26,18 @@ const store = {
         ...make.actions(state),
         async getUserData({ commit }) {
             console.log(Vue.$cookies.get("access_token"));
-            if (!Vue.$cookies.get("access_token")) {
-                await this._vm.axios
-                    .get("/user/get-access-token")
-                    .then(() => {});
+            if (Vue.$cookies.get("refresh_token")) {
+                if (!Vue.$cookies.get("access_token")) {
+                    await this._vm.axios
+                        .get("/user/get-access-token")
+                        .then(() => {});
+                }
+                this._vm.axios.get("/user/private/user").then(({ data }) => {
+                    const { username } = data;
+                    commit("username", username);
+                });
+                console.log("Hello from get User");
             }
-            this._vm.axios.get("/user/private/user").then(({ data }) => {
-                const { username } = data;
-                commit("username", username);
-            });
-            console.log("Hello from get User");
         },
         logOut({ commit }) {
             commit("username", "");
