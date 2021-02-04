@@ -6,6 +6,7 @@ import { make } from "vuex-pathify";
 import Register from "@/views/register/store";
 import Home from "@/views/home/store";
 import Login from "@/views/login/store";
+import Search from "@/views/search/store";
 Vue.use(Vuex);
 
 const state = {
@@ -48,7 +49,8 @@ const store = {
     modules: {
         Home,
         Register,
-        Login
+        Login,
+        Search
     }
 };
 

@@ -60,6 +60,7 @@
                                 <button
                                     class="rounded-0 btn btn-dark w-100 h-100"
                                     type="submit"
+                                    @click="onSubmit"
                                 >
                                     BOOK NOW
                                 </button>
@@ -79,7 +80,18 @@ export default {
         ...sync("Home", ["locations", "checkIn", "checkOut", "persons"])
     },
     methods: {
-        ...call(["getUserData"])
+        ...call(["getUserData"]),
+        onSubmit() {
+            this.$router.replace({
+                name: "Search",
+                query: {
+                    name: this.locations,
+                    checkIn: this.checkIn,
+                    checkOut: this.checkOut,
+                    persons: this.persons
+                }
+            });
+        }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
