@@ -57,6 +57,7 @@
                             >
                                 <div
                                     class="spinner-grow text-white"
+                                    style="width: 1rem; height: 1rem;"
                                     role="status"
                                     v-if="isLoading"
                                 ></div>

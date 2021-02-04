@@ -8,6 +8,7 @@ type User struct {
 	Username  string `json:"username" gorm:"unique"`
 	Password  string `json:"password"`
 	BirthDate string `json:"birth_date"`
+	Tickets   []Ticket
 }
 
 type UserResponse struct {
@@ -15,6 +16,7 @@ type UserResponse struct {
 	Email     string `json:"email" gorm:"unique" valid:"email,required"`
 	Username  string `json:"username" gorm:"unique"`
 	BirthDate string `json:"birth_date"`
+	Tickets   []Ticket
 }
 
 type UserErrors struct {

@@ -3,7 +3,9 @@ import { DateTime } from "luxon";
 const getDefaultState = () => ({
     locations: "",
     checkIn: DateTime.local().toISODate(),
-    checkOut: DateTime.local().toISODate(),
+    checkOut: DateTime.local()
+        .plus({ days: 1 })
+        .toISODate(),
     persons: 1
 });
 
