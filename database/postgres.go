@@ -38,5 +38,5 @@ func ConnectDB() {
 
 	log.Println("connected")
 
-	DB.AutoMigrate(&models.User{}, &models.Claims{})
+	DB.AutoMigrate(&models.User{}, &models.Claims{}, &models.Hotel{}, &models.Ticket{})
 }
