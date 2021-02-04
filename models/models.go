@@ -20,6 +20,7 @@ func (base *Base) BeforeCreate(tx *gorm.DB) error {
 	base.UUID = uuid.New()
 
 	t := GenerateISOString()
+
 	base.CreateAt, base.UpdateAt = t, t
 
 	return nil

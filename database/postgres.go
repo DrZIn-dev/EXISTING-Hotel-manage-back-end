@@ -22,6 +22,7 @@ func ConnectDB() {
 	dbPassword := os.Getenv("POSTGRES_PASSWORD")
 	dbDB := os.Getenv("POSTGRES_DB")
 	dbHost := os.Getenv("POSTGRES_HOST")
+
 	dbPort := os.Getenv("POSTGRES_PORT")
 
 	dsn := fmt.Sprintf("host=%v port=%v user=%v dbname=%v password=%v", dbHost, dbPort, dbUser, dbDB, dbPassword)
