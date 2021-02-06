@@ -73,10 +73,11 @@ export default {
             this.isLoading = true;
             this.onLogin()
                 .then(() => {
-                    this.isLoading = true;
+                    this.isLoading = false;
                     this.$router.replace({ name: "Home" });
                 })
                 .catch(err => {
+                    this.isLoading = false;
                     this.err = err;
                 });
             console.log("on submit");
