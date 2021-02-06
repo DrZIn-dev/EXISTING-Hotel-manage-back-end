@@ -73,12 +73,6 @@ func CreateUser(c *fiber.Ctx) error {
 
 	accessToken, refreshToken := util.GenerateTokens(u.UUID.String())
 	accessCookie, refreshCookie := util.GetAuthCookies(accessToken, refreshToken)
-	accessCookie.HTTPOnly = false
-	accessCookie.SameSite = ""
-	accessCookie.Secure = false
-	refreshCookie.HTTPOnly = false
-	refreshCookie.SameSite = ""
-	refreshCookie.Secure = false
 
 	c.Cookie(accessCookie)
 	c.Cookie(refreshCookie)
@@ -118,12 +112,6 @@ func LoginUser(c *fiber.Ctx) error {
 
 	accessToken, refreshToken := util.GenerateTokens(u.UUID.String())
 	accessCookie, refreshCookie := util.GetAuthCookies(accessToken, refreshToken)
-	accessCookie.HTTPOnly = false
-	accessCookie.SameSite = ""
-	accessCookie.Secure = false
-	refreshCookie.HTTPOnly = false
-	refreshCookie.SameSite = ""
-	refreshCookie.Secure = false
 	c.Cookie(accessCookie)
 	c.Cookie(refreshCookie)
 
@@ -167,9 +155,8 @@ func GetAccessToken(c *fiber.Ctx) error {
 		Name:     "access_token",
 		Value:    accessToken,
 		Expires:  time.Now().Add(15 * time.Minute),
-		HTTPOnly: false,
-		SameSite: "",
-		Secure:   false,
+		HTTPOnly: true,
+		Secure:   true,
 	})
 
 	return c.JSON(fiber.Map{"access_token": accessToken})
