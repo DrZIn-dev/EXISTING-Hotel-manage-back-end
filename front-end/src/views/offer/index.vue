@@ -10,9 +10,6 @@
           </span>
         </div>
         <div class="w-100 d-flex align-items-end mt-1">
-          <!-- Button trigger modal -->
-          <!-- Button trigger modal -->
-
           <button type="button" class="ms-auto btn btn-success rounded-0" data-bs-toggle="modal"
                   data-bs-target="#exampleModal">Book Now
           </button>

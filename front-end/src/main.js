@@ -17,8 +17,13 @@ axios.defaults.baseURL = "http://localhost:3000/api";
 Vue.use(VueAxios, axios);
 Vue.use(VueCookies);
 
-new Vue({
-    router,
-    store,
-    render: h => h(App)
-}).$mount("#app");
+let app = null;
+if (!app) {
+  store.dispatch("getUserData").then(() => {
+    app = new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount("#app");
+  });
+}
