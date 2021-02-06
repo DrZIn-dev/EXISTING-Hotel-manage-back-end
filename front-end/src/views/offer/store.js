@@ -2,11 +2,12 @@ import { DateTime } from "luxon";
 import { make } from "vuex-pathify";
 
 const getDefaultState = () => ({
+  id: "",
   name: "",
   checkIn: "",
   checkOut: "",
   persons: 0,
-  hotels: []
+  hotel: {}
 });
 
 const state = getDefaultState();
@@ -22,18 +23,21 @@ const mutations = {
 const actions = {
   ...make.actions(state),
   getHotel({ state, commit }) {
-    const { name, checkIn, checkOut } = state;
-    console.log(name, checkIn, checkOut);
+    const { id } = state;
     this._vm.axios
-      .get("/hotel/search", {
-        params: { name, cursor: 0, limit: 20, checkIn, checkOut }
+      .get("/hotel", {
+        params: { cursor: id }
       })
       .then(({ data }) => {
-        commit("hotels", [...state.hotels, ...data]);
-        console.log(data);
+        commit("hotel", data);
+        console.log("hotel"
+          , state.hotel
+        )
+        ;
       });
   },
-  setQueryParams({ commit }, { name, checkIn, checkOut, persons }) {
+  setQueryParams({ commit }, { id, name, checkIn, checkOut, persons }) {
+    commit("id", id);
     commit("name", name);
     commit(
       "checkIn",

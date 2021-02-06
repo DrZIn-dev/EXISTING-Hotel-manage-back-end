@@ -13,7 +13,7 @@ import (
 )
 
 func SetupHotelRoutes() {
-	HOTEL.Get("/", GetHotels)
+	HOTEL.Get("/", GetHotel)
 	HOTEL.Group("/search", Search)
 	private := HOTEL.Group("/private")
 	private.Use(util.SecureAuth())
@@ -21,43 +21,15 @@ func SetupHotelRoutes() {
 
 }
 
-func GetHotels(c *fiber.Ctx) error {
-
-	type maxNumber struct {
-		Max int `json:"max"`
-	}
+func GetHotel(c *fiber.Ctx) error {
 
 	cursor := c.Query("cursor")
-	cursorInt, _ := strconv.Atoi(cursor)
 
-	limit := c.Query("limit")
-	limitInt, _ := strconv.Atoi(limit)
+	h := new(models.Hotel)
 
-	checkIn := c.Query("checkIn")
-	checkOut := c.Query("checkOut")
-
-	checkInTime, err := dateparse.ParseLocal(checkIn)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	checkOutTime, err := dateparse.ParseLocal(checkOut)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	h := new([]models.Hotel)
-
-	res := db.DB.Model(&models.Hotel{}).Where("id > ? ", cursorInt).Limit(limitInt).Find(&h)
+	res := db.DB.Model(&models.Hotel{}).Where("uuid = ? ", cursor).First(&h)
 	if res.RowsAffected <= 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": true, "general": "Cannot find the Hotel"})
-	}
-
-	for i, hotel := range *h {
-		m := new(maxNumber)
-		subQuery := db.DB.Select("check_in_time, SUM(amount) as mySum").Where("hotel_id = ? and check_in_time >= ? and check_out_time <= ?", hotel.UUID, checkInTime, checkOutTime.Add(24*time.Hour)).Table("tickets").Group("check_in_time")
-		db.DB.Raw("SELECT MAX(mySum) FROM (?) as groupSum", subQuery).Scan(&m)
-		(*h)[i].Room = hotel.Room - m.Max
 	}
 
 	return c.JSON(h)
@@ -128,7 +100,12 @@ func Search(c *fiber.Ctx) error {
 
 	h := new([]models.Hotel)
 
-	err = db.DB.Table("hotels").Where("id > ?", cursorInt).Where("to_tsvector(name) @@ to_tsquery(?)", nameStr).Or("to_tsvector(description) @@ to_tsquery(?)", nameStr).Limit(limitInt).Find(&h).Error
+	query := db.DB.Table("hotels").Where("id > ?", cursorInt)
+	if len(nameStr) != 0 {
+		query = query.Where("to_tsvector(name) @@ to_tsquery(?)", nameStr).Or("to_tsvector(description) @@ to_tsquery(?)", nameStr)
+	}
+
+	err = query.Limit(limitInt).Find(&h).Error
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error":   true,

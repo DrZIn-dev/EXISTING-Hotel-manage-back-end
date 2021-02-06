@@ -7,6 +7,7 @@ import Register from "@/views/register/store";
 import Home from "@/views/home/store";
 import Login from "@/views/login/store";
 import Search from "@/views/search/store";
+import Offer from "@/views/offer/store"
 Vue.use(Vuex);
 
 const state = {
@@ -50,7 +51,8 @@ const store = {
         Home,
         Register,
         Login,
-        Search
+        Search,
+        Offer
     }
 };
 
