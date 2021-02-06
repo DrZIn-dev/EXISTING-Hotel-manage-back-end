@@ -25,6 +25,9 @@
           </div>
 
         </div>
+        <div class="pb-5">
+          <button class="btn btn-dark rounded-0" @click="loadMore">Load More</button>
+        </div>
       </div>
     </div>
   </div>
@@ -41,7 +44,7 @@ export default {
       "persons"])
   },
   methods: {
-    ...call("Search", ["setQueryParams", "getHotel"]),
+    ...call("Search", ["setQueryParams", "getHotel", "loadMore"]),
     onViewOffer(id) {
       this.$router.replace({
         name: "Offer",

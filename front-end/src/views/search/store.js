@@ -24,6 +24,17 @@ const mutations = {
 
 const actions = {
   ...make.actions(state),
+  loadMore({ state, commit }) {
+    const { name, checkIn, checkOut } = state;
+    this._vm.axios
+      .get("/hotel/search", {
+        params: { name, cursor: state.hotels.length, limit: 20, checkIn, checkOut }
+      })
+      .then(({ data }) => {
+        commit("hotels", [...state.hotels, ...data]);
+        console.log(data);
+      });
+  },
   getHotel({ state, commit }) {
     const { name, checkIn, checkOut } = state;
     console.log(name, checkIn, checkOut);
