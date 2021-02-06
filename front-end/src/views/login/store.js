@@ -32,7 +32,7 @@ const actions = {
                 console.log(data);
                 return Promise.resolve();
             })
-            .catch(err => Promise.reject(err));
+            .catch(err => Promise.reject(err.response.data));
     },
     resetDefaultState({ commit }) {
         commit("resetState");

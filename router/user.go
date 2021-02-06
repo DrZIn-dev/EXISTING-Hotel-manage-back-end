@@ -32,7 +32,7 @@ func CreateUser(c *fiber.Ctx) error {
 	err := c.BodyParser(u)
 
 	if err != nil {
-		return c.JSON(fiber.Map{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"input": "Please review your input",
 		})
@@ -94,22 +94,22 @@ func LoginUser(c *fiber.Ctx) error {
 	input := new(LoginInput)
 	err := c.BodyParser(input)
 	if err != nil {
-		return c.JSON(fiber.Map{"error": true, "input": "Please review your input"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": true, "input": "Please review your input"})
 	}
 	_, err = govalidator.ValidateStruct(input)
 	if err != nil {
-		return c.JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	u := new(models.User)
 	res := db.DB.Where(&models.User{Email: input.Identity}).Or(&models.User{Username: input.Identity}).First(&u)
 	if res.RowsAffected <= 0 {
-		return c.JSON(fiber.Map{"error": true, "general": "Invalid Credentials."})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": true, "general": "Invalid Credentials."})
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(input.Password))
 	if err != nil {
-		return c.JSON(fiber.Map{"error": true, "general": "Invalid Credentials."})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": true, "general": "Invalid Credentials."})
 	}
 
 	accessToken, refreshToken := util.GenerateTokens(u.UUID.String())
