@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"github.com/google/uuid"
+	"time"
+)
 
 type Ticket struct {
 	Base
+	GroupID      uuid.UUID `json:"group_id" gorm:"autoIncrement:false"`
 	UserID       string    `json:"user_id" valid:"required"`
 	HotelID      string    `json:"hotel_id" valid:"required"`
 	Hotel        Hotel     `json:"hotel" `

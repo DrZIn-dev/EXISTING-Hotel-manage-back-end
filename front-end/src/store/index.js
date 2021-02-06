@@ -8,13 +8,17 @@ import Home from "@/views/home/store";
 import Login from "@/views/login/store";
 import Search from "@/views/search/store";
 import Offer from "@/views/offer/store";
+import Ticket from "@/views/ticket/store";
 
 Vue.use(Vuex);
 
 const state = {
   birth_date: "",
   email: "",
-  username: ""
+  username: "",
+  msg: "",
+  title: "",
+  isShow: false
 };
 
 const store = {
@@ -27,6 +31,15 @@ const store = {
   },
   actions: {
     ...make.actions(state),
+    noti({ commit }, payload) {
+      const { msg, title } = payload;
+      commit("msg", msg);
+      commit("title", title);
+      commit("isShow", true);
+      setTimeout(() => {
+        commit("isShow", false);
+      }, 3000);
+    },
     async getUserData({ commit }) {
       console.log(Vue.$cookies.get("access_token"));
       if (Vue.$cookies.get("refresh_token")) {
@@ -56,7 +69,8 @@ const store = {
     Register,
     Login,
     Search,
-    Offer
+    Offer,
+    Ticket
   }
 };
 

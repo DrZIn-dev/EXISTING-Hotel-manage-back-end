@@ -16,7 +16,10 @@ const getters = {
 };
 
 const mutations = {
-  ...make.mutations(state)
+  ...make.mutations(state),
+  resetState(state) {
+    Object.assign(state, getDefaultState());
+  }
 };
 
 const actions = {

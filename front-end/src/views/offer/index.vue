@@ -35,7 +35,7 @@
 
 
     <!-- Modal -->
-    <div class="modal fade rounded-0" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <div class="modal fade rounded-0 hide" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
       <div class="modal-dialog rounded-0 modal-dialog-centered">
         <div class="modal-content rounded-0">
@@ -82,7 +82,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-success rounded-0">Confirm</button>
+            <button type="button" class="btn btn-success rounded-0" data-bs-dismiss="modal" @click="onSubmit">Confirm
+            </button>
           </div>
         </div>
       </div>
@@ -104,7 +105,17 @@ export default {
     })
   },
   methods: {
-    ...call("Offer", ["setQueryParams", "getHotel"])
+    ...call("Offer", ["setQueryParams", "getHotel", "createTicket"]),
+    ...call(["noti"]),
+    onSubmit() {
+      this.createTicket().then(() => {
+        this.noti({ title: "booking done", msg: " enjoy your holiday." });
+        this.$router.replace({
+          name: "Ticket"
+        });
+
+      });
+    }
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

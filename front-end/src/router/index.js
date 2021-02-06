@@ -1,11 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+import store from "@/store";
 import Home from "@/views/home";
 import Register from "@/views/register";
 import Login from "@/views/login";
 import Search from "@/views/search";
 import Offer from "@/views/offer";
+import Ticket from "@/views/ticket";
 
 Vue.use(VueRouter);
 
@@ -34,6 +35,10 @@ const routes = [
     path: "/offer",
     name: "Offer",
     component: Offer
+  }, {
+    path: "/ticket",
+    name: "Ticket",
+    component: Ticket
   }
 ];
 
@@ -43,4 +48,9 @@ const router = new VueRouter({
   routes
 });
 
+
+router.beforeEach((to, from, next) => {
+  store.dispatch("getUserData");
+  next();
+});
 export default router;

@@ -21,6 +21,22 @@ const mutations = {
 
 const actions = {
   ...make.actions(state),
+  createTicket({ state }) {
+    const { id, checkIn, checkOut, persons } = state;
+    console.log(new Date(checkIn));
+    return this._vm.axios
+      .post("/ticket/private/", {
+        "hotel_id": id,
+        "check_in": checkIn,
+        "check_out": checkOut,
+        "amount": parseInt(persons)
+      })
+      .then(({ data }) => {
+        console.log(data);
+        return Promise.resolve();
+      })
+      .catch(err => Promise.reject(err));
+  },
   getHotel({ state, commit }) {
     const { id } = state;
     this._vm.axios
