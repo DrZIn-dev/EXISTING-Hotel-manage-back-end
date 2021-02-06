@@ -159,7 +159,7 @@ func GetAccessToken(c *fiber.Ctx) error {
 		Name:     "access_token",
 		Value:    accessToken,
 		Expires:  time.Now().Add(15 * time.Minute),
-		HTTPOnly: true,
+		HTTPOnly: false,
 		SameSite: "None",
 		Secure:   true,
 	})
