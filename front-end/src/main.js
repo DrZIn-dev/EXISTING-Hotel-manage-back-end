@@ -13,7 +13,7 @@ import "@/scss/custom.scss";
 Vue.config.productionTip = false;
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "https://the-existing-test-back-end.herokuapp.com";
+axios.defaults.baseURL = "https://the-existing-test-back-end.herokuapp.com/api";
 Vue.use(VueAxios, axios);
 Vue.use(VueCookies);
 
