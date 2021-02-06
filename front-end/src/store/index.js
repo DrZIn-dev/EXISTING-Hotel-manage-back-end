@@ -68,7 +68,7 @@ const store = {
             commit("username", "");
             Vue.$cookies.remove("access_token");
             Vue.$cookies.remove("refresh_token");
-            await this._vm.axios.post("/user/signout").then(() => {
+            await this._vm.axios.post("/user/private/signout").then(() => {
                 return Promise.resolve();
             });
         }
