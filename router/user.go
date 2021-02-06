@@ -113,8 +113,6 @@ func LoginUser(c *fiber.Ctx) error {
 
 	accessToken, refreshToken := util.GenerateTokens(u.UUID.String())
 	accessCookie, refreshCookie := util.GetAuthCookies(accessToken, refreshToken)
-	accessCookie.SameSite = "None"
-	refreshCookie.SameSite = "None"
 
 	c.Cookie(accessCookie)
 	c.Cookie(refreshCookie)
