@@ -64,11 +64,13 @@ const store = {
 
             return Promise.resolve();
         },
-        logOut({ commit }) {
+        async logOut({ commit }) {
             commit("username", "");
             Vue.$cookies.remove("access_token");
             Vue.$cookies.remove("refresh_token");
-            this._vm.axios.post("/user/signout").then(() => {});
+            await this._vm.axios.post("/user/signout").then(() => {
+                return Promise.resolve();
+            });
         }
     },
     modules: {
