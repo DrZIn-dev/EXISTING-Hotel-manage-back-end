@@ -3,7 +3,7 @@
     <div class="container">
       <div class="panel mx-4">
         <div class="h1">Tickets</div>
-        <div class="row row-cols-4 row-cols-md-4 g-4 pt-4 pb-5">
+        <div class="row row-cols-xl-4 row-cols-md-3  row-cols-sm-2 g-4 pt-4 pb-5">
           <div class="col" v-for="(ticket,index) in tickets" :key="index">
             <div class="card">
               <div class="card-body">

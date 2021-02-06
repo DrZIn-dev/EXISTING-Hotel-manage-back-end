@@ -33,7 +33,10 @@ const actions = {
                 console.log(data);
                 return Promise.resolve();
             })
-            .catch(err => Promise.reject(err));
+            .catch(err => {
+                console.log(err.response);
+                return Promise.reject(err.response.data);
+            });
     }
 };
 

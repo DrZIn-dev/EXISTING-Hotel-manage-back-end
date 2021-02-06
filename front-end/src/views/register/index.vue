@@ -15,45 +15,84 @@
                         <br />
                         <div class="mb-3">
                             <label class="form-label">Email address</label>
-                            <input
-                                type="email"
-                                class="form-control rounded-0"
-                                placeholder="name@example.com"
-                                v-model="email"
-                            />
+                            <div class="input-group has-validation">
+                                <input
+                                    type="email"
+                                    class="form-control rounded-0"
+                                    :class="{
+                                        'is-invalid': !validEmail,
+                                        'is-valid': validEmail
+                                    }"
+                                    placeholder="name@example.com"
+                                    v-model="email"
+                                />
+
+                                <div class="invalid-feedback">
+                                    Please choose a e-mail.
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Username</label>
-                            <input
-                                type="text"
-                                class="form-control rounded-0"
-                                placeholder="Please type your name ..."
-                                v-model="username"
-                            />
+                            <div class="input-group has-validation">
+                                <input
+                                    type="text"
+                                    class="form-control rounded-0"
+                                    :class="{
+                                        'is-invalid': !validUsername,
+                                        'is-valid': validUsername
+                                    }"
+                                    placeholder="Please type your name ..."
+                                    v-model="username"
+                                    required
+                                />
+                                <div class="invalid-feedback">
+                                    Please choose a username.
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input
-                                type="password"
-                                class="form-control rounded-0"
-                                placeholder="Please type your password ..."
-                                v-model="password"
-                            />
+                            <div class="input-group has-validation is-invalid">
+                                <input
+                                    type="password"
+                                    class="form-control rounded-0  "
+                                    :class="{
+                                        'is-invalid': !validPassword,
+                                        'is-valid': validPassword
+                                    }"
+                                    placeholder="Please type your password ..."
+                                    v-model="password"
+                                />
+                                <div class="invalid-feedback">
+                                    Length of password should be atleast 8 and
+                                    it must be a combination of uppercase
+                                    letters, lowercase letters and numbers.
+                                </div>
+                            </div>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label">Birth Date</label>
-                            <input
-                                type="date"
-                                class="form-control rounded-0"
-                                v-model="birth_date"
-                            />
+                            <div class="input-group has-validation is-invalid">
+                                <input
+                                    type="date"
+                                    class="form-control rounded-0"
+                                    :class="{
+                                        'is-invalid': !validBDate,
+                                        'is-valid': validBDate
+                                    }"
+                                    v-model="birth_date"
+                                />
+                                <div class="invalid-feedback">
+                                    Choose a Birth Date.
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <button
                                 class="btn btn-dark w-100 rounded-0"
                                 @click="onSubmit"
-                                :disabled="isLoading"
+                                :disabled="isLoading || !validRegister"
                             >
                                 <div
                                     class="spinner-grow text-white"
@@ -82,10 +121,56 @@ export default {
         err: ""
     }),
     computed: {
-        ...sync("Register", ["username", "password", "email", "birth_date"])
+        ...sync("Register", ["username", "password", "email", "birth_date"]),
+        validRegister() {
+            return (
+                this.validEmail &&
+                this.validBDate &&
+                this.validUsername &&
+                this.validPassword
+            );
+        },
+        validEmail() {
+            return this.isEMail(this.email);
+        },
+        validBDate() {
+            console.log("b date", this.birth_date);
+            return this.isSpace(this.birth_date) && this.birth_date !== null;
+        },
+        validUsername() {
+            return this.isSpace(this.username);
+        },
+        validPassword() {
+            console.log(
+                this.password.length > 8,
+                this.isLowerCase(this.password)
+            );
+            return (
+                this.password.length >= 8 &&
+                this.isLowerCase(this.password) &&
+                this.isUpperCase(this.password) &&
+                this.isNumber(this.password)
+            );
+        }
     },
     methods: {
         ...call("Register", ["onRegister"]),
+        isUpperCase(str) {
+            return /[A-Z]/.test(str);
+        },
+        isLowerCase(str) {
+            return /[a-z]/.test(str);
+        },
+        isNumber(str) {
+            return /[0-9]/.test(str);
+        },
+        isSpace(str) {
+            return /\S/.test(str);
+        },
+        isEMail(str) {
+            let re = /\S+@\S+\.\S+/;
+            return re.test(str);
+        },
         onSubmit() {
             this.isLoading = true;
             this.onRegister()
