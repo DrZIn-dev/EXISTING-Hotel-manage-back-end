@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { make } from "vuex-pathify";
 
 const getDefaultState = () => ({
@@ -41,11 +40,11 @@ const actions = {
     commit("name", name);
     commit(
       "checkIn",
-      DateTime.fromISO(checkIn).toLocaleString(DateTime.DATE_SHORT)
+      checkIn
     );
     commit(
       "checkOut",
-      DateTime.fromISO(checkOut).toLocaleString(DateTime.DATE_SHORT)
+      checkOut
     );
     commit("persons", persons);
   }
