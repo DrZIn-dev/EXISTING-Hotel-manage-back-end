@@ -18,6 +18,8 @@ var jwtKey = []byte(os.Getenv("PRIVATE_KEY"))
 func SetupUserRoutes() {
 	USER.Post("/signup", CreateUser)
 	USER.Post("/signin", LoginUser)
+	USER.Post("/signout", Logout)
+
 	USER.Get("/get-access-token", GetAccessToken)
 
 	private := USER.Group("/private")
@@ -123,6 +125,20 @@ func LoginUser(c *fiber.Ctx) error {
 		"access_token":  accessToken,
 		"refresh_token": refreshToken,
 	})
+}
+
+func Logout(c *fiber.Ctx) error {
+	c.Cookie(&fiber.Cookie{
+		Name:     "access_token",
+		Value:    "",
+		Expires:  time.Now(),
+		HTTPOnly: false,
+		SameSite: "None",
+		Secure:   true,
+	})
+
+	return c.JSON(fiber.Map{"access_token": ""})
+
 }
 
 func GetAccessToken(c *fiber.Ctx) error {
